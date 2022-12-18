@@ -14,6 +14,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ListItem
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -29,24 +34,31 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.nads.githubrepo.R
 import com.nads.githubrepo.data.models.GitItem
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun GitTrendingScreen(viewModel:GitViewModel, gitItems:List<GitItem>) {
     val listState = rememberLazyListState()
+
     val cards by viewModel.cards.collectAsStateWithLifecycle()
     val expandedCardIds by viewModel.expandedCardUrlList.collectAsStateWithLifecycle()
-    LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp), state = listState){
-//        stickyHeader {
-//            Header()
-//        }
 
-        items(gitItems){ gitItem ->
-            GitItemScreen(viewModel=viewModel,gitItem = gitItem, modifier = Modifier, expanded = expandedCardIds.contains(gitItem.url))
-        }
+    LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp), state = listState) {
+
+            items(gitItems) { gitItem ->
+                GitItemScreen(
+                    viewModel = viewModel,
+                    gitItem = gitItem,
+                    expanded = expandedCardIds.contains(gitItem.url)
+                )
+            }
+
     }
+
 }
 
 @Composable
@@ -57,9 +69,9 @@ fun Header() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GitItemScreen(viewModel: GitViewModel,gitItem: GitItem,modifier:Modifier,expanded:Boolean) {
+fun GitItemScreen(viewModel: GitViewModel,gitItem: GitItem,expanded:Boolean) {
 
-    Column(modifier = modifier
+    Column(modifier = Modifier
         .fillMaxWidth()
         .padding(top = 20.dp, start = 10.dp)
         .clip(
@@ -94,18 +106,18 @@ fun GitItemScreen(viewModel: GitViewModel,gitItem: GitItem,modifier:Modifier,exp
             Column(modifier = Modifier.padding(start = 10.dp)) {
 
                 Text(
-                    text = gitItem.author, modifier.fillMaxWidth()
+                    text = gitItem.author, Modifier.fillMaxWidth()
                 )
 
                 Text(
-                    text = gitItem.name, modifier.fillMaxWidth()
+                    text = gitItem.name, Modifier.fillMaxWidth()
                 )
             }
         }
         if (expanded){
             Column() {
                 Text(
-                    text = gitItem.description, modifier.fillMaxWidth()
+                    text = gitItem.description, Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Row() {
@@ -171,6 +183,37 @@ fun ProgressBars(enable:Boolean) {
 
 
 }
+
+//@OptIn(ExperimentalMaterialApi::class)
+//@Preview
+//@Composable
+//fun SwipeRefresh() {
+//    val refreshScope = rememberCoroutineScope()
+//    var refreshing by remember { mutableStateOf(false) }
+//    var itemCount by remember { mutableStateOf(15) }
+//
+//    fun refresh() = refreshScope.launch {
+//        refreshing = true
+//        delay(1500)
+//      //  itemCount += 5
+//        refreshing = false
+//    }
+//
+//    val state = rememberPullRefreshState(refreshing, ::refresh)
+//
+//    Box(Modifier.pullRefresh(state)) {
+//        LazyColumn(Modifier.fillMaxSize()) {
+//            if (!refreshing) {
+//                items(itemCount) {
+//                    ListItem { Text(text = "Item ${itemCount - it}") }
+//                }
+//            }
+//        }
+//
+//        PullRefreshIndicator(refreshing, state, Modifier.align(Alignment.TopCenter))
+//    }
+//
+//}
 
 @Preview
 @Composable

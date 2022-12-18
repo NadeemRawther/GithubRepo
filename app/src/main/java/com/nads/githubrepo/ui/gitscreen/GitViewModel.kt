@@ -43,6 +43,24 @@ class GitViewModel @Inject constructor(private val repository:
 
          }
     }
+    fun refresh(){
+        _loading.value = true
+        viewModelScope.launch {
+            val result = repository.getGitItemList()
+
+            if (result.isSuccess){
+                Log.e("SDFSD",result.toString())
+                result.map {
+                        it->
+                    _cards.emit(it)
+                }
+            }else{
+                _error.value = true
+            }
+            _loading.value = false
+
+        }
+    }
     fun onCardClicked(url:String) {
         _expandedCardUrlList.value = _expandedCardUrlList.value.toMutableList().also { list ->
             list.clear()
