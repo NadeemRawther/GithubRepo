@@ -2,17 +2,22 @@ package com.nads.githubrepo.di
 
 
 
+import android.content.Context
+import androidx.room.Room
 import com.google.gson.JsonSyntaxException
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import com.nads.githubrepo.data.apiservice.GitHubRepoService
+import com.nads.githubrepo.data.persistence.GitHubDao
+import com.nads.githubrepo.data.persistence.GitHubDatabase
 import com.nads.githubrepo.data.repo.GitHubDefaultRep
 import com.nads.githubrepo.data.repo.GithubRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +32,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object LandFindModule {
+object GitHubRepoModule {
     @Singleton
     @Provides
     fun providesOkHttpClient(): OkHttpClient {
@@ -56,11 +61,11 @@ object LandFindModule {
             .build()
             .create(GitHubRepoService::class.java)
     }
-
+//yes sir
     @Singleton
     @Provides
-    fun provideRepository(service:GitHubRepoService,caroutinedispatchers:CoroutineDispatcher): GithubRepo{
-        return GitHubDefaultRep(service,caroutinedispatchers)
+    fun provideRepository(service:GitHubRepoService/*,gitHubDao: GitHubDao*/,caroutinedispatchers:CoroutineDispatcher): GithubRepo{
+        return GitHubDefaultRep(service/*,gitHubDao*/,caroutinedispatchers)
     }
 
     @Singleton
@@ -69,13 +74,17 @@ object LandFindModule {
         return Dispatchers.IO
     }
 
-
+//    @Provides
+//    fun provideGitDao(gitHubDatabase: GitHubDatabase): GitHubDao {
+//        return gitHubDatabase.gitHubDao()
+//    }
+//
 //    @Singleton
 //    @Provides
-//    fun provideDataBase(@ApplicationContext context: Context): LandFindDataBase {
+//    fun provideDataBase(@ApplicationContext context: Context): GitHubDatabase {
 //        return Room.databaseBuilder(
 //            context,
-//            LandFindDataBase::class.java, "Lands.db"
+//            GitHubDatabase::class.java, "gitTable"
 //        ).build()
 //    }
 

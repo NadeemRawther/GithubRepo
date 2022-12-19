@@ -1,6 +1,9 @@
 package com.nads.githubrepo
 
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +19,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import coil.compose.AsyncImage
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
@@ -47,6 +52,7 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     content = {
+                        val onLine = isOnline()
                         val loading by gitViewModel.loading.collectAsState()
                         val error by gitViewModel.error.collectAsState()
                         val swiprerefreshstate = rememberSwipeRefreshState(isRefreshing = loading)
@@ -65,7 +71,11 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
+    fun isOnline(): Boolean {
+        val connMgr = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
+        return networkInfo?.isConnected == true
+    }
 }
 
 @Composable

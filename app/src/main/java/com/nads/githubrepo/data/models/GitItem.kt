@@ -5,7 +5,7 @@ import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 import com.nads.githubrepo.data.models.BuiltBy
 
-@Entity
+
 data class GitItem(
     @SerializedName("author")
     val author: String,

@@ -2,6 +2,7 @@ package com.nads.githubrepo.data.repo
 
 import com.nads.githubrepo.data.apiservice.GitHubRepoService
 import com.nads.githubrepo.data.models.GitItem
+import com.nads.githubrepo.data.persistence.GitHubDao
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +12,7 @@ import javax.inject.Singleton
 @Singleton
 class GitHubDefaultRep @Inject constructor(
     private val gitHubRepoService: GitHubRepoService,
+    /*private val gitHubDao: GitHubDao,*/
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO):GithubRepo {
 
     override suspend fun getGitItemList(): Result<List<GitItem>> {

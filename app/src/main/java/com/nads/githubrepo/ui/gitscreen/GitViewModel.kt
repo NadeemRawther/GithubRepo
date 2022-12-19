@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +22,8 @@ class GitViewModel @Inject constructor(private val repository:
     val cards: StateFlow<List<GitItem>> get() = _cards
     private val _loading = MutableStateFlow(true)
     val loading: MutableStateFlow<Boolean> get() = _loading
+    private val _online = MutableStateFlow(true)
+    val online: MutableStateFlow<Boolean> get() = _online
     private val _error = MutableStateFlow(false)
     val error: MutableStateFlow<Boolean> get() = _error
     private val _expandedCardUrlList = MutableStateFlow(listOf<String>())
@@ -31,7 +34,6 @@ class GitViewModel @Inject constructor(private val repository:
          viewModelScope.launch {
              val result = repository.getGitItemList()
              if (result.isSuccess){
-                 Log.e("SDFSD",result.toString())
                  result.map {
                      it->
                      _cards.emit(it)
