@@ -1,6 +1,6 @@
 package com.nads.githubrepo.data.persistence
 
-import androidx.compose.ui.text.android.animation.SegmentType
+
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
