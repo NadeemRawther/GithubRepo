@@ -34,20 +34,22 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.nads.githubrepo.R
 import com.nads.githubrepo.data.models.GitItem
+import com.nads.githubrepo.data.persistence.GitTable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun GitTrendingScreen(viewModel:GitViewModel, gitItems:List<GitItem>) {
+fun GitTrendingScreen(viewModel:GitViewModel, gitItems:List<GitTable>,paddingValues: PaddingValues) {
     val listState = rememberLazyListState()
 
     val cards by viewModel.cards.collectAsStateWithLifecycle()
     val expandedCardIds by viewModel.expandedCardUrlList.collectAsStateWithLifecycle()
 
     LazyColumn(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp), state = listState) {
+        verticalArrangement = Arrangement.spacedBy(4.dp), state = listState,
+        modifier = Modifier.padding(paddingValues)) {
 
             items(gitItems) { gitItem ->
                 GitItemScreen(
@@ -69,7 +71,7 @@ fun Header() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GitItemScreen(viewModel: GitViewModel,gitItem: GitItem,expanded:Boolean) {
+fun GitItemScreen(viewModel: GitViewModel,gitItem: GitTable,expanded:Boolean) {
 
     Column(modifier = Modifier
         .fillMaxWidth()

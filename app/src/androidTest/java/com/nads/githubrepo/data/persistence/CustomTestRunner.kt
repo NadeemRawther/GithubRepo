@@ -1,4 +1,4 @@
-package com.nads.githubrepo
+package com.nads.githubrepo.data.persistence
 
 import android.app.Application
 import android.content.Context

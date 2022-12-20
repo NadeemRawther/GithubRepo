@@ -5,8 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nads.githubrepo.data.models.BuiltBy
 import com.nads.githubrepo.data.models.GitItem
+import com.nads.githubrepo.data.persistence.GitTable
 import com.nads.githubrepo.data.repo.GithubRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
@@ -18,9 +21,9 @@ import javax.inject.Inject
 class GitViewModel @Inject constructor(private val repository:
                                        GithubRepo): ViewModel() {
 
-    private val _cards = MutableStateFlow(listOf<GitItem>())
-    val cards: StateFlow<List<GitItem>> get() = _cards
-    private val _loading = MutableStateFlow(true)
+    private val _cards = MutableStateFlow(listOf<GitTable>())
+    val cards: StateFlow<List<GitTable>> get() = _cards
+    private val _loading = MutableStateFlow(false)
     val loading: MutableStateFlow<Boolean> get() = _loading
     private val _online = MutableStateFlow(true)
     val online: MutableStateFlow<Boolean> get() = _online
@@ -30,7 +33,8 @@ class GitViewModel @Inject constructor(private val repository:
     val expandedCardUrlList: StateFlow<List<String>> get() = _expandedCardUrlList
 
     init {
-          _loading.value = true
+ /*
+    _loading.value = true
          viewModelScope.launch {
              val result = repository.getGitItemList()
              if (result.isSuccess){
@@ -44,22 +48,25 @@ class GitViewModel @Inject constructor(private val repository:
              _loading.value = false
 
          }
-    }
-    fun refresh(){
+         */
+      }
+    fun refresh(isOnline:Boolean){
         _loading.value = true
         viewModelScope.launch {
-            val result = repository.getGitItemList()
+            withContext(Dispatchers.IO){
+                val result = repository.getGitItemList(isOnline)
 
-            if (result.isSuccess){
-                Log.e("SDFSD",result.toString())
-                result.map {
-                        it->
-                    _cards.emit(it)
+                if (result.isSuccess){
+                    result.map {
+                        it?.let { it1 -> _cards.emit(it1) }
+                    }
+
+                }else{
+                    _error.value = true
                 }
-            }else{
-                _error.value = true
+                _loading.value = false
             }
-            _loading.value = false
+
 
         }
     }

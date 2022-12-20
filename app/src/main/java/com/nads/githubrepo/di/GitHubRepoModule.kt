@@ -10,6 +10,8 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import com.nads.githubrepo.data.apiservice.GitHubRepoService
+import com.nads.githubrepo.data.persistence.GitHubDao
+import com.nads.githubrepo.data.persistence.GitHubDatabase
 import com.nads.githubrepo.data.repo.GitHubDefaultRep
 import com.nads.githubrepo.data.repo.GithubRepo
 import dagger.Module
@@ -59,11 +61,10 @@ object GitHubRepoModule {
             .build()
             .create(GitHubRepoService::class.java)
     }
-//yes sir
     @Singleton
     @Provides
-    fun provideRepository(service:GitHubRepoService/*,gitHubDao: GitHubDao*/,caroutinedispatchers:CoroutineDispatcher): GithubRepo{
-        return GitHubDefaultRep(service/*,gitHubDao*/,caroutinedispatchers)
+    fun provideRepository(service:GitHubRepoService,gitHubDao: GitHubDao,caroutinedispatchers:CoroutineDispatcher): GithubRepo{
+        return GitHubDefaultRep(service,gitHubDao,caroutinedispatchers)
     }
 
     @Singleton
@@ -72,19 +73,19 @@ object GitHubRepoModule {
         return Dispatchers.IO
     }
 
-//    @Provides
-//    fun provideGitDao(gitHubDatabase: GitHubDatabase): GitHubDao {
-//        return gitHubDatabase.gitHubDao()
-//    }
-//
-//    @Singleton
-//    @Provides
-//    fun provideDataBase(@ApplicationContext context: Context): GitHubDatabase {
-//        return Room.databaseBuilder(
-//            context,
-//            GitHubDatabase::class.java, "gitTable"
-//        ).build()
-//    }
+    @Provides
+    fun provideGitDao(gitHubDatabase: GitHubDatabase): GitHubDao {
+        return gitHubDatabase.gitHubDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideDataBase(@ApplicationContext context: Context): GitHubDatabase {
+        return Room.databaseBuilder(
+            context,
+            GitHubDatabase::class.java, "gitTable"
+        ).build()
+    }
 
 
 

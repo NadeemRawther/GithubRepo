@@ -12,10 +12,10 @@ import java.util.concurrent.Flow
 interface GitHubDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(gitTable: GitTable)
+    suspend fun insert(gitTable: GitTable)
 
     @Query("SELECT * FROM gitTable")
-    fun getAll(): LiveData<List<GitTable>>
+    fun getAll(): List<GitTable>
 
     @Query("DELETE FROM gitTable")
     suspend fun deleteAll()

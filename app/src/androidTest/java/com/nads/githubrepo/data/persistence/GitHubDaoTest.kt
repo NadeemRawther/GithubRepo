@@ -55,10 +55,7 @@ class GitHubDaoTest {
             , 5,"as we",785,"getviolet",
             "Red","nads",85,"fake"))
         gititem.map { dao.insert(it) }
-
-
         val allGitItems = dao.getAll().getOrAwaitValue()
-
         assertThat(allGitItems).isIn(gititem)
     }
 
@@ -73,7 +70,7 @@ class GitHubDaoTest {
 
         val allGitItems = dao.getAll().getOrAwaitValue()
 
-        assertThat(allGitItems).isNotIn(gititem)
+        assertThat(allGitItems).doesNotContain(gititem)
     }
 
 }
