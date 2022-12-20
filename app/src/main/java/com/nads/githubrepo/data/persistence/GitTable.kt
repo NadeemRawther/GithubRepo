@@ -11,8 +11,8 @@ data class GitTable (@ColumnInfo(name ="author")
                        val author: String,
                      @ColumnInfo(name="avatar")
                        val avatar: String,
-                     @ColumnInfo(name="builtBy")
-                       val builtBy: List<BuiltBy>,
+//                     @ColumnInfo(name="builtBy")
+//                       val builtBy: List<BuiltBy>,
                      @ColumnInfo(name="currentPeriodStars")
                        val currentPeriodStars: Int,
                      @ColumnInfo(name="description")

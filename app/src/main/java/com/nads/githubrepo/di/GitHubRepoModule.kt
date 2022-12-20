@@ -10,8 +10,6 @@ import com.google.gson.stream.JsonReader
 import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import com.nads.githubrepo.data.apiservice.GitHubRepoService
-import com.nads.githubrepo.data.persistence.GitHubDao
-import com.nads.githubrepo.data.persistence.GitHubDatabase
 import com.nads.githubrepo.data.repo.GitHubDefaultRep
 import com.nads.githubrepo.data.repo.GithubRepo
 import dagger.Module

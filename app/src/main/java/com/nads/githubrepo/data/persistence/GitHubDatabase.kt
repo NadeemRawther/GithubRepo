@@ -6,8 +6,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.nads.githubrepo.data.models.Converters
 
-@Database(entities = arrayOf(GitTable::class), version = 1, exportSchema = false)
-@TypeConverters(Converters::class)
-abstract class GitHubDatabase : RoomDatabase() {
-       abstract fun gitHubDao():GitHubDao
-}
+//@Database(entities = [GitTable::class], version = 1, exportSchema = false)
+//@TypeConverters(Converters::class)
+//abstract class GitHubDatabase : RoomDatabase() {
+//       abstract fun gitHubDao():GitHubDao
+//}
