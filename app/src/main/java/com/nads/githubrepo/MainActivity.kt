@@ -6,8 +6,8 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.os.Bundle
-
-
+import android.os.Handler
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -31,9 +31,26 @@ import com.nads.githubrepo.ui.theme.GitHubRepoTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val gitViewModel:GitViewModel  by viewModels()
+    var handler: Handler = Handler()
+    var runnable: Runnable? = null
+    var delay = 7200000
+    override fun onResume() {
+        handler.postDelayed(Runnable {
+            handler.postDelayed(runnable!!, delay.toLong())
+            gitViewModel.refresh(isOnline())
+            Toast.makeText(
+                this@MainActivity, "This method runs in every 2 hours",
+                Toast.LENGTH_SHORT
+            ).show()
+        }.also { runnable = it }, delay.toLong())
+        super.onResume()
+        super.onResume()
+    }
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
